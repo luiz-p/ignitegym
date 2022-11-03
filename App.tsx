@@ -8,17 +8,19 @@ import {
   useFonts
 } from '@expo-google-fonts/roboto'
 
+import { THEME } from './src/theme'
+
 export default function App () {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold })
 
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={THEME}>
       <StatusBar
         barStyle='light-content'
         backgroundColor='transparent'
         translucent
       />
-      {!fontsLoaded ? <View /> : <Loading />}
+      {fontsLoaded ? <View /> : <Loading />}
     </NativeBaseProvider>
   )
 }
