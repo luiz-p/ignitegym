@@ -11,16 +11,25 @@ import BackgroundImg from '@assets/background.png'
 import LogoSvg from '@assets/logo.svg'
 import { Button } from '@components/Button'
 import { Input } from '@components/Input'
+import { useNavigation } from '@react-navigation/native'
+import { AuthNavigationRoutesProps } from '@routes/auth.routes'
 
-export function SignUp () {
+export function SignIn () {
+  const navigation = useNavigation<AuthNavigationRoutesProps>()
+
+  function handleNewAccount () {
+    navigation.navigate('signUp')
+  }
+
   return (
     <ScrollView
       _contentContainerStyle={{ flexGrow: 1 }}
       showsVerticalScrollIndicator={false}
     >
-      <VStack flex={1} bg='gray.700' px={10}>
+      <VStack flex={1} px={10}>
         <Image
           source={BackgroundImg}
+          defaultSource={BackgroundImg}
           alt='Pessoas treinando'
           resizeMode='contain'
           position='absolute'
@@ -35,10 +44,9 @@ export function SignUp () {
 
         <Center>
           <Heading color='gray.100' fontSize='xl' mb={6} fontFamily='heading'>
-            Crie sua conta
+            Acesse sua conta
           </Heading>
 
-          <Input placeholder='Nome' />
           <Input
             placeholder='E-mail'
             keyboardType='email-address'
@@ -46,10 +54,19 @@ export function SignUp () {
           />
           <Input placeholder='Senha' secureTextEntry />
 
-          <Button title='Criar e acessar' />
+          <Button title='Acessar' />
         </Center>
 
-        <Button title='Voltar para o login' variant='outline' mt={24} />
+        <Center mt={24}>
+          <Text color='gray.100' fontSize='sm' mb={3} fontFamily='body'>
+            Ainda não tem acesso?
+          </Text>
+          <Button
+            title='Criar conta'
+            variant='outline'
+            onPress={handleNewAccount}
+          />
+        </Center>
       </VStack>
     </ScrollView>
   )
