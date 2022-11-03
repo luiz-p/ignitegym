@@ -1,5 +1,5 @@
 import { NativeBaseProvider } from 'native-base'
-import { StatusBar, View } from 'react-native'
+import { StatusBar } from 'react-native'
 
 import { Loading } from '@components/Loading'
 import {
@@ -8,6 +8,7 @@ import {
   useFonts
 } from '@expo-google-fonts/roboto'
 
+import { SignIn } from './src/Screens/SignIn'
 import { THEME } from './src/theme'
 
 export default function App () {
@@ -20,7 +21,7 @@ export default function App () {
         backgroundColor='transparent'
         translucent
       />
-      {fontsLoaded ? <View /> : <Loading />}
+      {fontsLoaded ? <SignIn /> : <Loading />}
     </NativeBaseProvider>
   )
 }
