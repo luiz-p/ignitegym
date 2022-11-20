@@ -1,6 +1,6 @@
 import { IInputProps, Input as NativeBaseInput } from 'native-base'
 
-export function Input ({ ...rest }:IInputProps) {
+export function Input ({ ...rest }: IInputProps) {
   return (
     <NativeBaseInput
       bg='gray.700'

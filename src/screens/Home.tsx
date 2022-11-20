@@ -1,12 +1,6 @@
 import { useState } from 'react'
 
-import {
-  FlatList,
-  Heading,
-  HStack,
-  Text,
-  VStack
-} from 'native-base'
+import { FlatList, Heading, HStack, Text, VStack } from 'native-base'
 
 import { ExerciseCard } from '@components/ExerciseCard'
 import { Group } from '@components/Group'
@@ -67,7 +61,9 @@ export function Home () {
         <FlatList
           data={exercises}
           keyExtractor={(item) => item}
-          renderItem={({ item }) => <ExerciseCard onPress={handleOpenExercisesDetails} />}
+          renderItem={({ item }) => (
+            <ExerciseCard onPress={handleOpenExercisesDetails} />
+          )}
           showsVerticalScrollIndicator={false}
           _contentContainerStyle={{ paddingBottom: 20 }}
         />

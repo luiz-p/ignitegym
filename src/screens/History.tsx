@@ -1,11 +1,6 @@
 import { useState } from 'react'
 
-import {
-  Heading,
-  SectionList,
-  Text,
-  VStack
-} from 'native-base'
+import { Heading, SectionList, Text, VStack } from 'native-base'
 
 import { HistoryCard } from '@components/HistoryCard'
 import { ScreenHeader } from '@components/ScreenHeader'

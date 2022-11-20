@@ -1,11 +1,4 @@
-import {
-  Center,
-  Heading,
-  Image,
-  ScrollView,
-  Text,
-  VStack
-} from 'native-base'
+import { Center, Heading, Image, ScrollView, Text, VStack } from 'native-base'
 
 import BackgroundImg from '@assets/background.png'
 import LogoSvg from '@assets/logo.svg'

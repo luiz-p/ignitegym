@@ -1,12 +1,4 @@
-import {
-  Box,
-  Heading,
-  HStack,
-  Icon,
-  Image,
-  Text,
-  VStack
-} from 'native-base'
+import { Box, Heading, HStack, Icon, Image, Text, VStack } from 'native-base'
 import { TouchableOpacity } from 'react-native'
 
 import BodySvg from '@assets/body.svg'
