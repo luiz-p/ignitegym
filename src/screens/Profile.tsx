@@ -8,9 +8,10 @@ import {
   ScrollView,
   Skeleton,
   Text,
+  useToast,
   VStack
 } from 'native-base'
-import { Alert, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 
 import { Button } from '@components/Button'
 import { Input } from '@components/Input'
@@ -22,6 +23,7 @@ const PHOTO_SIZE = 33
 export function Profile () {
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
   const [userPhoto, setUserPhoto] = useState('https://github.com/luiz-p.png')
+  const toast = useToast()
 
   async function handleUserPhotoSelect () {
     setPhotoIsLoading(true)
@@ -41,7 +43,11 @@ export function Profile () {
         const photoInfo = await FileSystem.getInfoAsync(photoSelected.uri)
 
         if (photoInfo.size && photoInfo.size / 1024 / 1024 > 5) {
-          return Alert.alert('Essa imagem é muito grande. Escolha uma de até 5MB')
+          return toast.show({
+            title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
+            placement: 'top',
+            bgColor: 'red.500'
+          })
         }
 
         setUserPhoto(photoSelected.uri)
