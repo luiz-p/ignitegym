@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import * as ImagePicker from 'expo-image-picker'
 import {
   Center,
   Heading,
@@ -19,6 +20,31 @@ const PHOTO_SIZE = 33
 
 export function Profile () {
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
+  const [userPhoto, setUserPhoto] = useState('https://github.com/luiz-p.png')
+
+  async function handleUserPhotoSelect () {
+    setPhotoIsLoading(true)
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true
+      })
+
+      if (photoSelected.cancelled) {
+        return
+      }
+
+      if (photoSelected.uri) {
+        setUserPhoto(photoSelected.uri)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setPhotoIsLoading(false)
+    }
+  }
 
   return (
     <VStack flex={1}>
@@ -38,13 +64,13 @@ export function Profile () {
               )
             : (
             <UserPhoto
-              source={{ uri: 'https://github.com/luiz-p.png' }}
+              source={{ uri: userPhoto }}
               alt='Foto do usuário'
               size={PHOTO_SIZE}
             />
               )}
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleUserPhotoSelect}>
             <Text
               color='green.500'
               fontWeight='bold'
