@@ -15,7 +15,9 @@ import { Profile } from '@screens/Profile'
 
 type IAppRoutes = {
   home: undefined
-  exercise: undefined
+  exercise: {
+    exerciseId: string
+  }
   history: undefined
   profile: undefined
 }
@@ -75,7 +77,11 @@ export function AppRoutes () {
         }}
       />
 
-      <Screen name='exercise' component={Exercise} options={{ tabBarButton: () => null }} />
+      <Screen
+        name='exercise'
+        component={Exercise}
+        options={{ tabBarButton: () => null }}
+      />
     </Navigator>
   )
 }
