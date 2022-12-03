@@ -6,7 +6,6 @@ import {
   HStack,
   Icon,
   Image,
-  ScrollView,
   Text,
   useToast,
   VStack
@@ -17,6 +16,7 @@ import BodySvg from '@assets/body.svg'
 import RepetitionsSvg from '@assets/repetitions.svg'
 import SeriesSvg from '@assets/series.svg'
 import { Button } from '@components/Button'
+import { Loading } from '@components/Loading'
 import { ExerciseDTO } from '@dtos/ExerciseDTO'
 import { Feather } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -29,6 +29,7 @@ type RouteParamsProps = {
 }
 
 export function Exercise () {
+  const [isLoading, setIsLoading] = useState(true)
   const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO)
   const navigation = useNavigation<AppNavigatorRoutesProps>()
   const route = useRoute()
@@ -41,6 +42,7 @@ export function Exercise () {
 
   async function fetchExerciseDetails () {
     try {
+      setIsLoading(true)
       const response = await api.get(`/exercises/${exerciseId}`)
 
       setExercise(response.data)
@@ -55,6 +57,8 @@ export function Exercise () {
         placement: 'top',
         bgColor: 'red.500'
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -93,7 +97,11 @@ export function Exercise () {
         </HStack>
       </VStack>
 
-      <ScrollView>
+      {isLoading
+        ? (
+        <Loading />
+          )
+        : (
         <VStack p={8}>
           <Image
             w='full'
@@ -132,7 +140,7 @@ export function Exercise () {
             <Button title='Marcar com realizado' />
           </Box>
         </VStack>
-      </ScrollView>
+          )}
     </VStack>
   )
 }
