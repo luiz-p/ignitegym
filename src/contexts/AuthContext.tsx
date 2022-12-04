@@ -15,7 +15,7 @@ import {
 
 export type AuthContextDataProps = {
   user: UserDTO
-  singIn: (email: string, password: string) => Promise<void>
+  signIn: (email: string, password: string) => Promise<void>
   updateUserProfile: (userUpdated: UserDTO) => Promise<void>
   signOut: () => Promise<void>
   isLoadingUserStorageData: boolean
@@ -51,7 +51,7 @@ export function AuthContextProvider ({ children }: AuthContextProviderProps) {
     }
   }
 
-  async function singIn (email: string, password: string) {
+  async function signIn (email: string, password: string) {
     try {
       const { data } = await api.post('/sessions', { email, password })
 
@@ -113,7 +113,7 @@ export function AuthContextProvider ({ children }: AuthContextProviderProps) {
     <AuthContext.Provider
       value={{
         user,
-        singIn,
+        signIn,
         updateUserProfile,
         signOut,
         isLoadingUserStorageData
