@@ -6,8 +6,6 @@ import {
 } from '@storage/storageAuthToken'
 import { AppError } from '@utils/AppError'
 
-type SignOut = () => void
-
 type PromiseType = {
   resolve: (value?: unknown) => void
   reject: (reason?: unknown) => void
@@ -18,8 +16,14 @@ type ProcessQueueParams = {
   token: string | null
 }
 
+type RegisterInterceptTokenManagerProps = {
+  signOut: () => void
+  refreshedTokenUpdated: (newToken: string) => void
+}
+
 type APIInstanceProps = AxiosInstance & {
-  registerInterceptTokenManager: (signOut: SignOut) => () => void
+  // eslint-disable-next-line no-empty-pattern
+  registerInterceptTokenManager: ({ }: RegisterInterceptTokenManagerProps) => () => void
 }
 
 const api = axios.create({
@@ -41,7 +45,7 @@ const processQueue = ({ error, token = null }: ProcessQueueParams): void => {
   })
 }
 
-api.registerInterceptTokenManager = (signOut) => {
+api.registerInterceptTokenManager = ({ signOut, refreshedTokenUpdated }) => {
   const interceptTokenManager = api.interceptors.response.use(
     (response) => response,
     async (requestError) => {
@@ -83,6 +87,7 @@ api.registerInterceptTokenManager = (signOut) => {
               api.defaults.headers.common.Authorization = `Bearer ${data.token}`
               originalRequest.headers.Authorization = `Bearer ${data.token}`
 
+              refreshedTokenUpdated(data.token)
               processQueue({ error: null, token: data.token })
 
               resolve(originalRequest)
