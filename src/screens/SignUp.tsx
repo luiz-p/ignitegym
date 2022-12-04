@@ -17,7 +17,7 @@ import { Input } from '@components/Input'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from '@react-navigation/native'
 import { api } from '@services/api'
-import { AppError } from '@utils/AppErrors'
+import { AppError } from '@utils/AppError'
 
 type FormDataProps = {
   name: string

@@ -22,7 +22,7 @@ import { UserPhoto } from '@components/UserPhoto'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useAuth } from '@hooks/useAuth'
 import { api } from '@services/api'
-import { AppError } from '@utils/AppErrors'
+import { AppError } from '@utils/AppError'
 
 const PHOTO_SIZE = 33
 

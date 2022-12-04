@@ -10,7 +10,7 @@ import { ExerciseDTO } from '@dtos/ExerciseDTO'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '@routes/app.routes'
 import { api } from '@services/api'
-import { AppError } from '@utils/AppErrors'
+import { AppError } from '@utils/AppError'
 
 export function Home () {
   const [groups, setGroups] = useState<string[]>([])
