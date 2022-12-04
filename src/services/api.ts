@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { AppError } from '@utils/AppErros'
+import { AppError } from '@utils/AppErrors'
 
 const api = axios.create({
   baseURL: 'http://192.168.29.32:3333'

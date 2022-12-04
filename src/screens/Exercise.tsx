@@ -22,7 +22,7 @@ import { Feather } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '@routes/app.routes'
 import { api } from '@services/api'
-import { AppError } from '@utils/AppErros'
+import { AppError } from '@utils/AppErrors'
 
 type RouteParamsProps = {
   exerciseId: string

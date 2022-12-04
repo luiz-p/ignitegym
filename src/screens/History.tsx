@@ -7,7 +7,7 @@ import { ScreenHeader } from '@components/ScreenHeader'
 import { HistoryByDayDTO } from '@dtos/HistoryByDayDTO'
 import { useFocusEffect } from '@react-navigation/native'
 import { api } from '@services/api'
-import { AppError } from '@utils/AppErros'
+import { AppError } from '@utils/AppErrors'
 
 export function History () {
   const [isLoading, setIsLoading] = useState(true)

@@ -18,7 +18,7 @@ import { Input } from '@components/Input'
 import { useAuth } from '@hooks/useAuth'
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigationRoutesProps } from '@routes/auth.routes'
-import { AppError } from '@utils/AppErros'
+import { AppError } from '@utils/AppErrors'
 
 type FormData = {
   email: string
