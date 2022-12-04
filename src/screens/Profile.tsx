@@ -15,6 +15,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { TouchableOpacity } from 'react-native'
 import * as yup from 'yup'
 
+import defaultUserPhotoImg from '@assets/userPhotoDefault.png'
 import { Button } from '@components/Button'
 import { Input } from '@components/Input'
 import { ScreenHeader } from '@components/ScreenHeader'
@@ -59,7 +60,6 @@ const profileSchema = yup.object({
 export function Profile () {
   const [isUpdating, setIsUpdating] = useState(false)
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
-  const [userPhoto, setUserPhoto] = useState('https://github.com/luiz-p.png')
 
   const toast = useToast()
   const { user, updateUserProfile } = useAuth()
@@ -93,7 +93,7 @@ export function Profile () {
       if (photoSelected.uri) {
         const photoInfo = await FileSystem.getInfoAsync(photoSelected.uri)
 
-        if (photoInfo.size && photoInfo.size / 1024 / 1024 > 2) {
+        if (photoInfo.size && photoInfo.size / 1024 / 1024 > 5) {
           return toast.show({
             title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
             placement: 'top',
@@ -101,7 +101,40 @@ export function Profile () {
           })
         }
 
-        setUserPhoto(photoSelected.uri)
+        const fileExtension = photoSelected.uri.split('.').pop()
+
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`.toLowerCase(),
+          uri: photoSelected.uri,
+          type: `${photoSelected.type}/${fileExtension}`
+        } as any
+
+        // eslint-disable-next-line no-undef
+        const userPhotoUploadForm = new FormData()
+
+        userPhotoUploadForm.append('avatar', photoFile)
+
+        const avatarUpdtedResponse = await api.patch(
+          '/users/avatar',
+          userPhotoUploadForm,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        )
+
+        const userUpdated = user
+
+        userUpdated.avatar = avatarUpdtedResponse.data.avatar
+
+        await updateUserProfile(userUpdated)
+
+        toast.show({
+          title: 'Foto atualizada!',
+          placement: 'top',
+          bgColor: 'green.500'
+        })
       }
     } catch (error) {
       console.log(error)
@@ -160,7 +193,11 @@ export function Profile () {
               )
             : (
             <UserPhoto
-              source={{ uri: userPhoto }}
+              source={
+                user.avatar
+                  ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+                  : defaultUserPhotoImg
+              }
               alt='Foto do usuário'
               size={PHOTO_SIZE}
             />
