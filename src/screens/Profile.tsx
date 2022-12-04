@@ -11,22 +11,41 @@ import {
   useToast,
   VStack
 } from 'native-base'
+import { Controller, useForm } from 'react-hook-form'
 import { TouchableOpacity } from 'react-native'
 
 import { Button } from '@components/Button'
 import { Input } from '@components/Input'
 import { ScreenHeader } from '@components/ScreenHeader'
 import { UserPhoto } from '@components/UserPhoto'
+import { useAuth } from '@hooks/useAuth'
 
 const PHOTO_SIZE = 33
+
+type FormDataProps = {
+  name: string
+  email: string
+  password: string
+  old_password: string
+  confirm_password: string
+}
 
 export function Profile () {
   const [photoIsLoading, setPhotoIsLoading] = useState(false)
   const [userPhoto, setUserPhoto] = useState('https://github.com/luiz-p.png')
-  const toast = useToast()
 
-  async function handleUserPhotoSelect () {
+  const toast = useToast()
+  const { user } = useAuth()
+  const { control, handleSubmit } = useForm<FormDataProps>({
+    defaultValues: {
+      name: user.name,
+      email: user.email
+    }
+  })
+
+  async function handleUserPhotoSelected () {
     setPhotoIsLoading(true)
+
     try {
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -42,7 +61,7 @@ export function Profile () {
       if (photoSelected.uri) {
         const photoInfo = await FileSystem.getInfoAsync(photoSelected.uri)
 
-        if (photoInfo.size && photoInfo.size / 1024 / 1024 > 5) {
+        if (photoInfo.size && photoInfo.size / 1024 / 1024 > 2) {
           return toast.show({
             title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
             placement: 'top',
@@ -59,6 +78,10 @@ export function Profile () {
     }
   }
 
+  async function handleProfileUpdate (data: FormDataProps) {
+    console.log(data)
+  }
+
   return (
     <VStack flex={1}>
       <ScreenHeader title='Perfil' />
@@ -72,7 +95,7 @@ export function Profile () {
               h={PHOTO_SIZE}
               rounded='full'
               startColor='gray.500'
-              endColor={'gray.400'}
+              endColor='gray.400'
             />
               )
             : (
@@ -83,7 +106,7 @@ export function Profile () {
             />
               )}
 
-          <TouchableOpacity onPress={handleUserPhotoSelect}>
+          <TouchableOpacity onPress={handleUserPhotoSelected}>
             <Text
               color='green.500'
               fontWeight='bold'
@@ -95,27 +118,88 @@ export function Profile () {
             </Text>
           </TouchableOpacity>
 
-          <Input placeholder='Nome' bg='gray.600' />
-          <Input bg='gray.600' placeholder='E-mail' isDisabled />
+          <Controller
+            control={control}
+            name='name'
+            render={({ field: { value, onChange } }) => (
+              <Input
+                bg='gray.600'
+                placeholder='Nome'
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name='email'
+            render={({ field: { value, onChange } }) => (
+              <Input
+                bg='gray.600'
+                placeholder='E-mail'
+                isDisabled
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
 
           <Heading
-            alignSelf='flex-start'
             color='gray.200'
             fontSize='md'
-            fontFamily='heading'
             mb={2}
+            alignSelf='flex-start'
             mt={12}
+            fontFamily='heading'
           >
             Alterar senha
           </Heading>
-          <Input bg='gray.600' placeholder='Senha antiga' secureTextEntry />
-          <Input bg='gray.600' placeholder='Nova senha' secureTextEntry />
-          <Input
-            bg='gray.600'
-            placeholder='Confirme a nova senha'
-            secureTextEntry
+
+          <Controller
+            control={control}
+            name='old_password'
+            render={({ field: { onChange } }) => (
+              <Input
+                bg='gray.600'
+                placeholder='Senha antiga'
+                secureTextEntry
+                onChangeText={onChange}
+              />
+            )}
           />
-          <Button title='Atualizar' mt={4} />
+
+          <Controller
+            control={control}
+            name='password'
+            render={({ field: { onChange } }) => (
+              <Input
+                bg='gray.600'
+                placeholder='Nova senha'
+                secureTextEntry
+                onChangeText={onChange}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name='confirm_password'
+            render={({ field: { onChange } }) => (
+              <Input
+                bg='gray.600'
+                placeholder='Confirme a nova senha'
+                secureTextEntry
+                onChangeText={onChange}
+              />
+            )}
+          />
+
+          <Button
+            title='Atualizar'
+            mt={4}
+            onPress={handleSubmit(handleProfileUpdate)}
+          />
         </Center>
       </ScrollView>
     </VStack>
